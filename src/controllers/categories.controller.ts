@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { RESPONSES } from 'src/utils/constants';
-import { success } from 'src/utils/network';
+import { RESPONSES } from '@utils/constants';
+import { success } from '@utils/network';
 
 const OBJECT = 'categories';
 @Controller(OBJECT)

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { RESPONSES } from 'src/utils/constants';
-import { success } from 'src/utils/network';
+import { RESPONSES } from '@utils/constants';
+import { success } from '@utils/network';
 
 const OBJECT = 'users';
 
