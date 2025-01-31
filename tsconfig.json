@@ -17,7 +17,10 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "moduleResolution":"node",
+    "moduleResolution": "node",
+    "types": [
+      "@types/jest"
+    ],
     "paths": {
       "@utils/*": [
         "src/utils/*"

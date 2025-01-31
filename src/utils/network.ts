@@ -1,9 +1,6 @@
 import type { Response } from './constants';
-export const success = (
-    { response: { message, ...res } }: response,
-    extra: object = {},
-) => ({
-    status: message,
+export const success = (res: response, extra: object = {}) => ({
+    status: res.response.message,
     ...res,
     ...extra,
 });

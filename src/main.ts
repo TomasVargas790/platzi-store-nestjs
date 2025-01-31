@@ -6,7 +6,7 @@ const {
     api: { port },
 } = env;
 
-async function bootstrap() {
+export async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     await app.listen(port);
 }

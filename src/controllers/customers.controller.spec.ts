@@ -15,4 +15,12 @@ describe('CustomersController', () => {
     it('should be defined', () => {
         expect(controller).toBeDefined();
     });
+
+    it('should return create object', () => {
+        expect(controller.create()).toHaveProperty('object', 'customers');
+    });
+
+    it('should return getAll', () => {
+        expect(controller.getAll()).toHaveProperty('object', 'customers');
+    });
 });
