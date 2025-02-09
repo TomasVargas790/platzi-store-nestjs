@@ -24,6 +24,9 @@
     "paths": {
       "@utils/*": [
         "src/utils/*"
+      ],
+      "@entities/*": [
+        "src/entities/*"
       ]
     }
   }
