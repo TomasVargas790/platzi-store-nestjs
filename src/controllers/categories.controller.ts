@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+} from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
 
@@ -29,6 +37,28 @@ export class CategoriesController {
                 object: OBJECT,
             },
             payload,
+        );
+    }
+
+    @Put(':id')
+    update(@Param('id') id: number, @Body() payload: object = {}) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { ...payload, id },
+        );
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { id },
         );
     }
 }

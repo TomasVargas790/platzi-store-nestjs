@@ -1,8 +1,19 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Query,
+    Put,
+    Delete,
+} from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
 
-@Controller('products')
+const OBJECT = 'products';
+
+@Controller(OBJECT)
 export class ProductsController {
     @Get(':id')
     getProduct(@Param('id') params: string) {
@@ -26,6 +37,28 @@ export class ProductsController {
                 object: 'products',
             },
             payload,
+        );
+    }
+
+    @Put(':id')
+    update(@Param('id') id: number, @Body() payload: object = {}) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { ...payload, id },
+        );
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { id },
         );
     }
 }
