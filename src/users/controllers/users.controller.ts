@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
+import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
 import { createUserDTO, updateUserDTO } from 'src/users/dtos/users.dto';
 import { UsersService } from 'src/users/services/users.service';
 
@@ -26,6 +27,31 @@ export class UsersController {
                 object: OBJECT,
             },
             { rows: this.usersService.findAll() },
+        );
+    }
+
+    @Get(':id')
+    getOne(@Param('id', ParseIntPipe) id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { rows: this.usersService.findOne(id) },
+        );
+    }
+
+    @Get(':id/orders')
+    getOrdersByUserId(@Param('id', ParseIntPipe) id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            {
+                ...this.usersService.findOne(id),
+                orders: this.usersService.findOrderByUserId(id),
+            },
         );
     }
 

@@ -1,12 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Order } from 'src/users/entities/order.entity';
 import { createOrderDTO, updateOrderDTO } from 'src/users/dtos/orders.dto';
+import { User } from '../entities/user.entity';
 @Injectable()
 export class OrdersService {
     private orders: Order[] = [
         {
             id: 1,
-            customerId: 1,
+            date: new Date(),
+            products: [],
+            user: new User(),
         },
     ];
 

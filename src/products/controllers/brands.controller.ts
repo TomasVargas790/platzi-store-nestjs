@@ -29,9 +29,20 @@ export class BrandsController {
         );
     }
 
+    @Get(':id')
+    getOne(@Param('id', ParseIntPipe) id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { rows: this.brandsService.findOne(id) },
+        );
+    }
+
     @Post()
     create(@Body() payload: createBrandDTO) {
-        const brand = this.create(payload);
+        const brand = this.brandsService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,

@@ -33,6 +33,17 @@ export class CustomersController {
         );
     }
 
+    @Get(':id')
+    getOne(@Param('id', ParseIntPipe) id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { rows: this.customersService.findOne(id) },
+        );
+    }
+
     @Post()
     create(@Body() payload: createCustomerDTO) {
         const customer = this.customersService.create(payload);

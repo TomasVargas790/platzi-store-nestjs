@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrdersController } from './orders.controller';
+import { User } from '../entities/user.entity';
 
 describe('OrdersController', () => {
     let controller: OrdersController;
@@ -19,7 +20,9 @@ describe('OrdersController', () => {
     it('should return create object', () => {
         expect(
             controller.create({
-                customerId: 1,
+                date: new Date(),
+                products: [],
+                user: new User(),
             }),
         ).toHaveProperty('object', 'orders');
     });

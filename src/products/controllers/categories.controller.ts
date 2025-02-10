@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Post,
     Put,
 } from '@nestjs/common';
@@ -28,6 +29,17 @@ export class CategoriesController {
                 object: OBJECT,
             },
             { rows: this.categoriesService.findAll() },
+        );
+    }
+
+    @Get(':id')
+    getOne(@Param('id', ParseIntPipe) id: number) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            { rows: this.categoriesService.findOne(id) },
         );
     }
 
