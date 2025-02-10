@@ -9,6 +9,11 @@ import { CustomersController } from './controllers/customers.controller';
 import { BrandsController } from './controllers/brands.controller';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsService } from './services/products.service';
+import { UsersService } from './services/users.service';
+import { BrandsService } from './services/brands.service';
+import { CategoriesService } from './services/categories.service';
+import { OrdersService } from './services/orders.service';
+import { CustomersService } from './services/customers.service';
 
 @Module({
     imports: [
@@ -25,6 +30,14 @@ import { ProductsService } from './services/products.service';
         CustomersController,
         BrandsController,
     ],
-    providers: [AppService, ProductsService],
+    providers: [
+        AppService,
+        ProductsService,
+        CategoriesService,
+        OrdersService,
+        UsersService,
+        CustomersService,
+        BrandsService,
+    ],
 })
 export class AppModule {}

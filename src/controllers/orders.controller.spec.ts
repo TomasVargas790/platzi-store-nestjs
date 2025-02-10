@@ -17,7 +17,11 @@ describe('OrdersController', () => {
     });
 
     it('should return create object', () => {
-        expect(controller.create()).toHaveProperty('object', 'orders');
+        expect(
+            controller.create({
+                customerId: 1,
+            }),
+        ).toHaveProperty('object', 'orders');
     });
 
     it('should return getAll', () => {

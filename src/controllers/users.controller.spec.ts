@@ -17,7 +17,13 @@ describe('UsersController', () => {
     });
 
     it('should return create object', () => {
-        expect(controller.create()).toHaveProperty('object', 'users');
+        expect(
+            controller.create({
+                name: 'test',
+                password: 'grandetuco1',
+                username: 'vargastomas2003@gmail.com',
+            }),
+        ).toHaveProperty('object', 'users');
     });
 
     it('should return getAll', () => {

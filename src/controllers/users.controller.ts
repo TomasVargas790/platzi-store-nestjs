@@ -9,43 +9,53 @@ import {
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
+import { createUserDTO, updateUserDTO } from 'src/dtos/users.dto';
+import { UsersService } from 'src/services/users.service';
 
 const OBJECT = 'users';
 
 @Controller(OBJECT)
 export class UsersController {
+    constructor(private usersService: UsersService) {}
+
     @Get()
     getAll() {
-        return success({
-            response: RESPONSES.SUCCESS,
-            object: OBJECT,
-        });
-    }
-
-    @Post()
-    create(@Body() payload: object = {}) {
-        return success(
-            {
-                response: RESPONSES.SUCCESS_CREATION,
-                object: OBJECT,
-            },
-            payload,
-        );
-    }
-
-    @Put(':id')
-    update(@Param('id') id: number, @Body() payload: object = {}) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { ...payload, id },
+            { rows: this.usersService.findAll() },
+        );
+    }
+
+    @Post()
+    create(@Body() payload: createUserDTO) {
+        const user = this.usersService.create(payload);
+        return success(
+            {
+                response: RESPONSES.SUCCESS_CREATION,
+                object: OBJECT,
+            },
+            user,
+        );
+    }
+
+    @Put(':id')
+    update(@Param('id') id: number, @Body() payload: updateUserDTO = {}) {
+        const user = this.usersService.update(id, payload);
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            user,
         );
     }
 
     @Delete(':id')
     delete(@Param('id') id: number) {
+        this.usersService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

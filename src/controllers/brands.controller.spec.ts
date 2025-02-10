@@ -17,7 +17,10 @@ describe('BrandsController', () => {
     });
 
     it('should return create object', () => {
-        expect(controller.create()).toHaveProperty('object', 'brands');
+        expect(controller.create({ name: 'AMD' })).toHaveProperty(
+            'object',
+            'brands',
+        );
     });
 
     it('should return getAll', () => {

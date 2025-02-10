@@ -9,43 +9,57 @@ import {
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
+import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
+import { createCustomerDTO, updateCustomerDTO } from 'src/dtos/customers.dto';
+import { CustomersService } from 'src/services/customers.service';
 
 const OBJECT = 'customers';
 
 @Controller(OBJECT)
 export class CustomersController {
+    constructor(private customersService: CustomersService) {}
+
     @Get()
     getAll() {
-        return success({
-            response: RESPONSES.SUCCESS,
-            object: OBJECT,
-        });
-    }
-
-    @Post()
-    create(@Body() payload: object = {}) {
-        return success(
-            {
-                response: RESPONSES.SUCCESS_CREATION,
-                object: OBJECT,
-            },
-            payload,
-        );
-    }
-
-    @Put(':id')
-    update(@Param('id') id: number, @Body() payload: object = {}) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { ...payload, id },
+            { rows: this.customersService.findAll() },
+        );
+    }
+
+    @Post()
+    create(@Body() payload: createCustomerDTO) {
+        const customer = this.customersService.create(payload);
+        return success(
+            {
+                response: RESPONSES.SUCCESS_CREATION,
+                object: OBJECT,
+            },
+            customer,
+        );
+    }
+
+    @Put(':id')
+    update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() payload: updateCustomerDTO = {},
+    ) {
+        const customer = this.customersService.update(id, payload);
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            customer,
         );
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number) {
+    delete(@Param('id', ParseIntPipe) id: number) {
+        this.customersService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

@@ -17,7 +17,15 @@ describe('CustomersController', () => {
     });
 
     it('should return create object', () => {
-        expect(controller.create()).toHaveProperty('object', 'customers');
+        expect(
+            controller.create({
+                firstName: 'test',
+                lastName: 'test',
+                email: 'test@test.com',
+                phone: '1112341234',
+                userId: 1,
+            }),
+        ).toHaveProperty('object', 'customers');
     });
 
     it('should return getAll', () => {
