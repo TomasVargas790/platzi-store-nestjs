@@ -9,14 +9,14 @@ import {
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
-import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
-import { createBrandDTO, updateBrandDTO } from 'src/dtos/brands.dto';
-import { BrandsService } from 'src/services/brands.service';
+import { createOrderDTO, updateOrderDTO } from 'src/users/dtos/orders.dto';
+import { OrdersService } from 'src/users/services/orders.service';
 
-const OBJECT = 'brands';
-@Controller(OBJECT)
-export class BrandsController {
-    constructor(private brandsService: BrandsService) {}
+const OBJECT = 'orders';
+
+@Controller('orders')
+export class OrdersController {
+    constructor(private ordersService: OrdersService) {}
 
     @Get()
     getAll() {
@@ -25,40 +25,39 @@ export class BrandsController {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.brandsService.findAll() },
+            {
+                rows: this.ordersService.findAll(),
+            },
         );
     }
 
     @Post()
-    create(@Body() payload: createBrandDTO) {
-        const brand = this.create(payload);
+    create(@Body() payload: createOrderDTO) {
+        const order = this.ordersService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,
                 object: OBJECT,
             },
-            brand,
+            order,
         );
     }
 
     @Put(':id')
-    update(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() payload: updateBrandDTO = {},
-    ) {
-        const brand = this.brandsService.update(id, payload);
+    update(@Param('id') id: number, @Body() payload: updateOrderDTO = {}) {
+        const order = this.ordersService.update(id, payload);
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            brand,
+            order,
         );
     }
 
     @Delete(':id')
-    delete(@Param('id', ParseIntPipe) id: number) {
-        this.brandsService.delete(id);
+    delete(@Param('id') id: number) {
+        this.ordersService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

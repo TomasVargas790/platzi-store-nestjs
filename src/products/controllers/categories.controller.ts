@@ -9,8 +9,11 @@ import {
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
-import { createCategoryDTO, updateCategoryDTO } from 'src/dtos/categories.dto';
-import { CategoriesService } from 'src/services/categories.service';
+import {
+    createCategoryDTO,
+    updateCategoryDTO,
+} from 'src/products/dtos/categories.dto';
+import { CategoriesService } from 'src/products/services/categories.service';
 
 const OBJECT = 'categories';
 @Controller(OBJECT)

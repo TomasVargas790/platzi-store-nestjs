@@ -11,9 +11,12 @@ import {
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
-import { ParseIntPipe } from '../common/parse-int/parse-int.pipe';
-import { ProductsService } from 'src/services/products.service';
-import { createProductDTO, updateProductDTO } from 'src/dtos/products.dto';
+import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
+import { ProductsService } from 'src/products/services/products.service';
+import {
+    createProductDTO,
+    updateProductDTO,
+} from 'src/products/dtos/products.dto';
 
 const OBJECT = 'products';
 

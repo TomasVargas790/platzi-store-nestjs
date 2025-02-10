@@ -3,12 +3,12 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
-import { ProductsController } from './controllers/products.controller';
-import { CategoriesController } from './controllers/categories.controller';
-import { OrdersController } from './controllers/orders.controller';
-import { UsersController } from './controllers/users.controller';
-import { CustomersController } from './controllers/customers.controller';
-import { BrandsController } from './controllers/brands.controller';
+import { ProductsController } from './products/controllers/products.controller';
+import { CategoriesController } from './products/controllers/categories.controller';
+import { OrdersController } from './users/controllers/orders.controller';
+import { UsersController } from './users/controllers/users.controller';
+import { CustomersController } from './users/controllers/customers.controller';
+import { BrandsController } from './products/controllers/brands.controller';
 import { AppService } from './app.service';
 
 describe('AppModule', () => {

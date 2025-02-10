@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from '@entities/user.entity';
-import { createUserDTO, updateUserDTO } from 'src/dtos/users.dto';
+import { User } from 'src/users/entities/user.entity';
+import { createUserDTO, updateUserDTO } from 'src/users/dtos/users.dto';
 @Injectable()
 export class UsersService {
     private users: User[] = [
