@@ -21,7 +21,7 @@ export const validateEnvVariables = (envVariables: string[]): void => {
     envVariables.forEach((variable) => {
         if (!process.env[variable]) {
             console.error(`Error: ${variable} is missing in the environment.`);
-            process.exit(1);
+            //process.exit(1);
         }
     });
 };

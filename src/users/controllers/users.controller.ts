@@ -7,6 +7,7 @@ import {
     Param,
     Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
 import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
@@ -15,6 +16,7 @@ import { UsersService } from 'src/users/services/users.service';
 
 const OBJECT = 'users';
 
+@ApiTags('Users')
 @Controller(OBJECT)
 export class UsersController {
     constructor(private usersService: UsersService) {}

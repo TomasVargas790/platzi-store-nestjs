@@ -3,9 +3,14 @@ import { User } from 'src/users/entities/user.entity';
 import { createUserDTO, updateUserDTO } from 'src/users/dtos/users.dto';
 import { Order } from '../entities/order.entity';
 import { ProductsService } from 'src/products/services/products.service';
+import { ConfigService } from '@nestjs/config';
+
 @Injectable()
 export class UsersService {
-    constructor(private productService: ProductsService) {}
+    constructor(
+        private productService: ProductsService,
+        private configService: ConfigService,
+    ) {}
 
     private users: User[] = [
         {
@@ -19,6 +24,8 @@ export class UsersService {
     counterId = 0;
 
     findAll() {
+        console.log(this.configService.get('PORT'));
+
         return this.users;
     }
 

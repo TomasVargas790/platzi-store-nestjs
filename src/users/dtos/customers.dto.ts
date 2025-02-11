@@ -6,7 +6,7 @@ import {
     IsEmail,
     IsPhoneNumber,
 } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class createCustomerDTO {
     @IsString()
@@ -17,6 +17,7 @@ export class createCustomerDTO {
     @IsNotEmpty()
     lastName: string;
 
+    @ApiProperty({ description: 'the email of the user' })
     @IsString()
     @IsEmail()
     @IsNotEmpty()
