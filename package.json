@@ -81,5 +81,8 @@
     "setupFiles": [
       "./jest.setup.ts"
     ]
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
