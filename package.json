@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.0",
-    "@nestjs/common": "^11.0.9",
+    "@nestjs/common": "^10.0.9",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^11.0.9",
     "@nestjs/mapped-types": "^2.1.0",
