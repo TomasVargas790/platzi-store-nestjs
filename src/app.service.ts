@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import config from '@utils/config';
+
 @Injectable()
 export class AppService {
     constructor(
@@ -10,7 +11,6 @@ export class AppService {
 
     getHello(): string {
         console.log(this.configService);
-
         return 'Hello World!';
     }
 }
