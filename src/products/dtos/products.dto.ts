@@ -30,6 +30,11 @@ export class createProductDTO {
     @IsNotEmpty()
     @IsUrl()
     readonly image: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    @IsPositive()
+    readonly brandId: number;
 }
 
 export class updateProductDTO extends PartialType(createProductDTO) {}

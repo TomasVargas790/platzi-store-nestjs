@@ -22,44 +22,44 @@ export class UsersController {
     constructor(private usersService: UsersService) {}
 
     @Get()
-    getAll() {
+    async getAll() {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.usersService.findAll() },
+            { rows: await this.usersService.findAll() },
         );
     }
 
     @Get(':id')
-    getOne(@Param('id', ParseIntPipe) id: number) {
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.usersService.findOne(id) },
+            { rows: await this.usersService.findOne(id) },
         );
     }
 
     @Get(':id/orders')
-    getOrdersByUserId(@Param('id', ParseIntPipe) id: number) {
+    async getOrdersByUserId(@Param('id', ParseIntPipe) id: number) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
             {
-                ...this.usersService.findOne(id),
-                orders: this.usersService.findOrderByUserId(id),
+                ...(await this.usersService.findOne(id)),
+                orders: await this.usersService.findOrderByUserId(id),
             },
         );
     }
 
     @Post()
-    create(@Body() payload: createUserDTO) {
-        const user = this.usersService.create(payload);
+    async create(@Body() payload: createUserDTO) {
+        const user = await this.usersService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,
@@ -70,8 +70,8 @@ export class UsersController {
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() payload: updateUserDTO = {}) {
-        const user = this.usersService.update(id, payload);
+    async update(@Param('id') id: number, @Body() payload: updateUserDTO = {}) {
+        const user = await this.usersService.update(id, payload);
         return success(
             {
                 response: RESPONSES.SUCCESS,
@@ -82,8 +82,8 @@ export class UsersController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number) {
-        this.usersService.delete(id);
+    async delete(@Param('id') id: number) {
+        await this.usersService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

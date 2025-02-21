@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "node",
+    "allowJs": false,
     "types": [
       "@types/jest"
     ],
@@ -29,5 +30,8 @@
         "src/entities/*"
       ]
     }
-  }
+  },
+  "exclude": [
+    "./dist/**/*"
+  ]
 }

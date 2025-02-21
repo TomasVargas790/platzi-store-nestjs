@@ -23,30 +23,30 @@ export class CustomersController {
     constructor(private customersService: CustomersService) {}
 
     @Get()
-    getAll() {
+    async getAll() {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.customersService.findAll() },
+            { rows: await this.customersService.findAll() },
         );
     }
 
     @Get(':id')
-    getOne(@Param('id', ParseIntPipe) id: number) {
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.customersService.findOne(id) },
+            { rows: await this.customersService.findOne(id) },
         );
     }
 
     @Post()
-    create(@Body() payload: createCustomerDTO) {
-        const customer = this.customersService.create(payload);
+    async create(@Body() payload: createCustomerDTO) {
+        const customer = await this.customersService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,
@@ -57,11 +57,11 @@ export class CustomersController {
     }
 
     @Put(':id')
-    update(
+    async update(
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: updateCustomerDTO = {},
     ) {
-        const customer = this.customersService.update(id, payload);
+        const customer = await this.customersService.update(id, payload);
         return success(
             {
                 response: RESPONSES.SUCCESS,
@@ -72,8 +72,8 @@ export class CustomersController {
     }
 
     @Delete(':id')
-    delete(@Param('id', ParseIntPipe) id: number) {
-        this.customersService.delete(id);
+    async delete(@Param('id', ParseIntPipe) id: number) {
+        await this.customersService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

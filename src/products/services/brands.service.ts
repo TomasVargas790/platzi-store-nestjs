@@ -1,55 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Brand } from 'src/products/entities/brand.entity';
 import { createBrandDTO, updateBrandDTO } from 'src/products/dtos/brands.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class BrandsService {
-    private brands: Brand[] = [
-        {
-            id: 1,
-            name: 'PC',
-        },
-    ];
+    constructor(
+        @InjectRepository(Brand) private brandRepository: Repository<Brand>,
+    ) {}
 
     counterId = 0;
 
     findAll() {
-        return this.brands;
+        return this.brandRepository.find();
     }
 
-    findOne(id: number) {
-        const product = this.brands.find((p) => p.id === id);
-        if (!product) {
-            throw new NotFoundException(`Brand ${id} not found!`);
+    async findOne(id: number) {
+        const brand = await this.brandRepository.findOne(id);
+        if (!brand) {
+            throw new NotFoundException(`Product ${id} not found!`);
         }
-        return product;
+        return brand;
     }
 
     create(payload: createBrandDTO) {
-        this.counterId++;
-
-        const newBrand = {
-            id: this.counterId,
-            ...payload,
-        } as Brand;
-
-        this.brands = [...this.brands, newBrand];
-        return newBrand;
+        const newProduct = this.brandRepository.create(payload);
+        return this.brandRepository.save(newProduct);
     }
 
-    update(id: number, payload: updateBrandDTO) {
-        this.brands = this.brands.map((p) =>
-            p.id === id ? { ...p, ...(payload as unknown as Brand) } : { ...p },
-        );
-        return this.brands.find((p) => p.id === id);
+    async update(id: number, payload: updateBrandDTO) {
+        const brand = await this.brandRepository.findOne(id);
+        this.brandRepository.merge(brand, payload);
+        return this.brandRepository.save(brand);
     }
 
-    delete(id: number) {
-        const newBrands = this.brands.filter((p) => p.id !== id);
-        if (this.brands.length === newBrands.length) {
+    async delete(id: number) {
+        const brand = await this.brandRepository.findOne(id);
+        if (!brand) {
             throw new NotFoundException(`Brand ${id} not found!`);
         }
-        this.brands = [...newBrands];
-
-        return id;
+        return await this.brandRepository.delete(id);
     }
 }

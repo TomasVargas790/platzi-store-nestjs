@@ -1,61 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Customer } from 'src/users/entities/customer.entity';
-import { createCustomerDTO, updateCustomerDTO } from 'src/users/dtos/customers.dto';
+import { Customer } from '../entities/customer.entity';
+import { createCustomerDTO, updateCustomerDTO } from '../dtos/customers.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class CustomersService {
-    private customers: Customer[] = [
-        {
-            id: 1,
-            firstName: 'Tomás',
-            lastName: 'Vargas',
-            email: 'vargastomas2003@gmail.com',
-            phone: '1126365060',
-            userId: 1,
-        },
-    ];
+    constructor(
+        @InjectRepository(Customer)
+        private customerRepository: Repository<Customer>,
+    ) {}
 
     counterId = 0;
 
     findAll() {
-        return this.customers;
+        return this.customerRepository.find();
     }
 
-    findOne(id: number) {
-        const customer = this.customers.find((p) => p.id === id);
+    async findOne(id: number) {
+        const customer = await this.customerRepository.findOne(id);
         if (!customer) {
-            throw new NotFoundException(`Customer ${id} not found!`);
+            throw new NotFoundException(`Product ${id} not found!`);
         }
         return customer;
     }
 
     create(payload: createCustomerDTO) {
-        this.counterId++;
-
-        const newCustomer = {
-            id: this.counterId,
-            ...payload,
-        } as Customer;
-
-        this.customers = [...this.customers, newCustomer];
-        return newCustomer;
+        const newProduct = this.customerRepository.create(payload);
+        return this.customerRepository.save(newProduct);
     }
 
-    update(id: number, payload: updateCustomerDTO) {
-        this.customers = this.customers.map((p) =>
-            p.id === id
-                ? { ...p, ...(payload as unknown as Customer) }
-                : { ...p },
-        );
-        return this.customers.find((p) => p.id === id);
+    async update(id: number, payload: updateCustomerDTO) {
+        const customer = await this.customerRepository.findOne(id);
+        this.customerRepository.merge(customer, payload);
+        return this.customerRepository.save(customer);
     }
 
-    delete(id: number) {
-        const newCustomers = this.customers.filter((p) => p.id !== id);
-        if (this.customers.length === newCustomers.length) {
+    async delete(id: number) {
+        const customer = await this.customerRepository.findOne(id);
+        if (!customer) {
             throw new NotFoundException(`Customer ${id} not found!`);
         }
-        this.customers = [...newCustomers];
-
-        return id;
+        return await this.customerRepository.delete(id);
     }
 }

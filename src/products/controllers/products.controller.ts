@@ -12,11 +12,8 @@ import {
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
-import { ProductsService } from 'src/products/services/products.service';
-import {
-    createProductDTO,
-    updateProductDTO,
-} from 'src/products/dtos/products.dto';
+import { ProductsService } from '../services/products.service';
+import { createProductDTO, updateProductDTO } from '../dtos/products.dto';
 
 const OBJECT = 'products';
 
@@ -26,8 +23,8 @@ export class ProductsController {
 
     @Get(':id')
     @HttpCode(HttpStatus.ACCEPTED)
-    getProduct(@Param('id', ParseIntPipe) id: number) {
-        return this.productsService.findOne(id);
+    async getProduct(@Param('id', ParseIntPipe) id: number) {
+        return await this.productsService.findOne(id);
     }
 
     @Get()
@@ -67,8 +64,8 @@ export class ProductsController {
     }
 
     @Delete(':id')
-    delete(@Param('id', ParseIntPipe) id: number) {
-        this.productsService.delete(+id);
+    async delete(@Param('id', ParseIntPipe) id: number) {
+        await this.productsService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

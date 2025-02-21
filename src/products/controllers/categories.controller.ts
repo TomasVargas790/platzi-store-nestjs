@@ -14,7 +14,7 @@ import {
     createCategoryDTO,
     updateCategoryDTO,
 } from 'src/products/dtos/categories.dto';
-import { CategoriesService } from 'src/products/services/categories.service';
+import { CategoriesService } from '../services/categories.service';
 
 const OBJECT = 'categories';
 @Controller(OBJECT)

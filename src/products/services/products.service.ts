@@ -4,27 +4,21 @@ import {
     createProductDTO,
     updateProductDTO,
 } from 'src/products/dtos/products.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 @Injectable()
 export class ProductsService {
-    private products: Product[] = [
-        {
-            id: 1,
-            name: 'PC',
-            description: 'personal computer',
-            price: 10.2,
-            image: '',
-            stock: 10,
-        },
-    ];
+    constructor(
+        @InjectRepository(Product)
+        private productRepository: Repository<Product>,
+    ) {}
 
-    counterId = 0;
-
-    findAll() {
-        return this.products;
+    async findAll() {
+        return await this.productRepository.find();
     }
 
-    findOne(id: number) {
-        const product = this.products.find((p) => p.id === id);
+    async findOne(id: number) {
+        const product = await this.productRepository.findOne(id);
         if (!product) {
             throw new NotFoundException(`Product ${id} not found!`);
         }
@@ -32,33 +26,21 @@ export class ProductsService {
     }
 
     create(payload: createProductDTO) {
-        this.counterId++;
-
-        const newProduct = {
-            id: this.counterId,
-            ...payload,
-        } as Product;
-
-        this.products = [...this.products, newProduct];
-        return newProduct;
+        const newProduct = this.productRepository.create(payload);
+        return this.productRepository.save(newProduct);
     }
 
-    update(id: number, payload: updateProductDTO) {
-        this.products = this.products.map((p) =>
-            p.id === id
-                ? { ...p, ...(payload as unknown as Product) }
-                : { ...p },
-        );
-        return this.products.find((p) => p.id === id);
+    async update(id: number, payload: updateProductDTO) {
+        const product = await this.productRepository.findOne(id);
+        this.productRepository.merge(product, payload);
+        return this.productRepository.save(product);
     }
 
-    delete(id: number) {
-        const newProducts = this.products.filter((p) => p.id !== id);
-        if (this.products.length === newProducts.length) {
+    async delete(id: number) {
+        const product = await this.productRepository.findOne(id);
+        if (!product) {
             throw new NotFoundException(`Product ${id} not found!`);
         }
-        this.products = [...newProducts];
-
-        return id;
+        return await this.productRepository.delete(id);
     }
 }

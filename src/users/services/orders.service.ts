@@ -1,58 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Order } from 'src/users/entities/order.entity';
-import { createOrderDTO, updateOrderDTO } from 'src/users/dtos/orders.dto';
-import { User } from '../entities/user.entity';
+import { Order } from '../entities/order.entity';
+import { createOrderDTO, updateOrderDTO } from '../dtos/orders.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class OrdersService {
-    private orders: Order[] = [
-        {
-            id: 1,
-            date: new Date(),
-            products: [],
-            user: new User(),
-        },
-    ];
+    constructor(
+        @InjectRepository(Order) private orderRepository: Repository<Order>,
+    ) {}
 
     counterId = 0;
 
     findAll() {
-        return this.orders;
+        return this.orderRepository.find();
     }
 
-    findOne(id: number) {
-        const order = this.orders.find((p) => p.id === id);
+    async findOne(id: number) {
+        const order = await this.orderRepository.findOne(id);
         if (!order) {
-            throw new NotFoundException(`Order ${id} not found!`);
+            throw new NotFoundException(`Product ${id} not found!`);
         }
         return order;
     }
 
     create(payload: createOrderDTO) {
-        this.counterId++;
-
-        const newOrder = {
-            id: this.counterId,
-            ...payload,
-        } as Order;
-
-        this.orders = [...this.orders, newOrder];
-        return newOrder;
+        const newProduct = this.orderRepository.create(payload);
+        return this.orderRepository.save(newProduct);
     }
 
-    update(id: number, payload: updateOrderDTO) {
-        this.orders = this.orders.map((p) =>
-            p.id === id ? { ...p, ...(payload as unknown as Order) } : { ...p },
-        );
-        return this.orders.find((p) => p.id === id);
+    async update(id: number, payload: updateOrderDTO) {
+        const order = await this.orderRepository.findOne(id);
+        this.orderRepository.merge(order, payload);
+        return this.orderRepository.save(order);
     }
 
-    delete(id: number) {
-        const newOrders = this.orders.filter((p) => p.id !== id);
-        if (this.orders.length === newOrders.length) {
+    async delete(id: number) {
+        const order = await this.orderRepository.findOne(id);
+        if (!order) {
             throw new NotFoundException(`Order ${id} not found!`);
         }
-        this.orders = [...newOrders];
-
-        return id;
+        return await this.orderRepository.delete(id);
     }
 }
