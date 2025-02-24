@@ -5,18 +5,18 @@ export class createCustomerDTO {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    firstName: string;
+    readonly firstName: string;
 
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    lastName: string;
+    readonly lastName: string;
 
     @ApiProperty()
     @IsString()
     @IsPhoneNumber('AR')
     @IsNotEmpty()
-    phone: string;
+    readonly phone: string;
 }
 
 export class updateCustomerDTO extends PartialType(createCustomerDTO) {}

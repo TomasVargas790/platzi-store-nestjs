@@ -8,12 +8,17 @@ import {
     Delete,
     HttpStatus,
     HttpCode,
+    Query,
 } from '@nestjs/common';
 import { RESPONSES } from '@utils/constants';
 import { success } from '@utils/network';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
 import { ProductsService } from '../services/products.service';
-import { createProductDTO, updateProductDTO } from '../dtos/products.dto';
+import {
+    createProductDTO,
+    FilterProductsDTO,
+    updateProductDTO,
+} from '../dtos/products.dto';
 
 const OBJECT = 'products';
 
@@ -28,10 +33,8 @@ export class ProductsController {
     }
 
     @Get()
-    getProducts() {
-        // @Query('brand') brand = '', // @Query('offset') offset = 0, // @Query('limit') limit = 100,
-        //return { message: `limit ${limit} offset ${offset} brand ${brand}` };
-        return this.productsService.findAll();
+    getProducts(@Query() params?: FilterProductsDTO) {
+        return this.productsService.findAll(params);
     }
 
     @Post()
@@ -63,6 +66,25 @@ export class ProductsController {
         );
     }
 
+    @Put(':id/category/:categoryId')
+    async addCategory(
+        @Param('id', ParseIntPipe) id: number,
+        @Param('categoryId', ParseIntPipe) categoryId: number,
+    ) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            {
+                ...(await this.productsService.addCategoryByProductId(
+                    id,
+                    categoryId,
+                )),
+            },
+        );
+    }
+
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
         await this.productsService.delete(id);
@@ -72,6 +94,25 @@ export class ProductsController {
                 object: OBJECT,
             },
             { id },
+        );
+    }
+
+    @Delete(':id/category/:categoryId')
+    async deleteCategory(
+        @Param('id', ParseIntPipe) id: number,
+        @Param('categoryId', ParseIntPipe) categoryId: number,
+    ) {
+        return success(
+            {
+                response: RESPONSES.SUCCESS,
+                object: OBJECT,
+            },
+            {
+                ...(await this.productsService.removeCategoryByProductId(
+                    id,
+                    categoryId,
+                )),
+            },
         );
     }
 }

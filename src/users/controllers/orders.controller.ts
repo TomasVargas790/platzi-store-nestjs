@@ -20,32 +20,32 @@ export class OrdersController {
     constructor(private ordersService: OrdersService) {}
 
     @Get()
-    getAll() {
+    async getAll() {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
             {
-                rows: this.ordersService.findAll(),
+                rows: await this.ordersService.findAll(),
             },
         );
     }
 
     @Get(':id')
-    getOne(@Param('id', ParseIntPipe) id: number) {
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.ordersService.findOne(id) },
+            { rows: await this.ordersService.findOne(id) },
         );
     }
 
     @Post()
-    create(@Body() payload: createOrderDTO) {
-        const order = this.ordersService.create(payload);
+    async create(@Body() payload: createOrderDTO) {
+        const order = await this.ordersService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,
@@ -56,8 +56,11 @@ export class OrdersController {
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() payload: updateOrderDTO = {}) {
-        const order = this.ordersService.update(id, payload);
+    async update(
+        @Param('id') id: number,
+        @Body() payload: updateOrderDTO = {},
+    ) {
+        const order = await this.ordersService.update(id, payload);
         return success(
             {
                 response: RESPONSES.SUCCESS,
@@ -68,8 +71,8 @@ export class OrdersController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number) {
-        this.ordersService.delete(id);
+    async delete(@Param('id') id: number) {
+        await this.ordersService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

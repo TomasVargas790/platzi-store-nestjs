@@ -17,7 +17,9 @@ export class CustomersService {
     }
 
     async findOne(id: number) {
-        const customer = await this.customerRepository.findOne(id);
+        const customer = await this.customerRepository.findOne({
+            where: { id },
+        });
         if (!customer) {
             throw new NotFoundException(`Product ${id} not found!`);
         }
@@ -30,13 +32,17 @@ export class CustomersService {
     }
 
     async update(id: number, payload: updateCustomerDTO) {
-        const customer = await this.customerRepository.findOne(id);
+        const customer = await this.customerRepository.findOne({
+            where: { id },
+        });
         this.customerRepository.merge(customer, payload);
         return this.customerRepository.save(customer);
     }
 
     async delete(id: number) {
-        const customer = await this.customerRepository.findOne(id);
+        const customer = await this.customerRepository.findOne({
+            where: { id },
+        });
         if (!customer) {
             throw new NotFoundException(`Customer ${id} not found!`);
         }

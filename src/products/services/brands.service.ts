@@ -16,26 +16,33 @@ export class BrandsService {
     }
 
     async findOne(id: number) {
-        const brand = await this.brandRepository.findOne(id);
+        const brand = await this.brandRepository.findOne({
+            where: { id },
+            relations: ['products'],
+        });
         if (!brand) {
             throw new NotFoundException(`Product ${id} not found!`);
         }
         return brand;
     }
 
-    create(payload: createBrandDTO) {
+    async create(payload: createBrandDTO) {
         const newProduct = this.brandRepository.create(payload);
-        return this.brandRepository.save(newProduct);
+        return await this.brandRepository.save(newProduct);
     }
 
     async update(id: number, payload: updateBrandDTO) {
-        const brand = await this.brandRepository.findOne(id);
+        const brand = await this.brandRepository.findOne({
+            where: { id },
+        });
         this.brandRepository.merge(brand, payload);
-        return this.brandRepository.save(brand);
+        return await this.brandRepository.save(brand);
     }
 
     async delete(id: number) {
-        const brand = await this.brandRepository.findOne(id);
+        const brand = await this.brandRepository.findOne({
+            where: { id },
+        });
         if (!brand) {
             throw new NotFoundException(`Brand ${id} not found!`);
         }

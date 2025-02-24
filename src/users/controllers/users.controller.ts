@@ -39,7 +39,9 @@ export class UsersController {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: await this.usersService.findOne(id) },
+            {
+                rows: await this.usersService.findOne(id),
+            },
         );
     }
 

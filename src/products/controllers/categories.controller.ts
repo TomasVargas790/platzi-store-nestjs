@@ -22,24 +22,26 @@ export class CategoriesController {
     constructor(private categoriesService: CategoriesService) {}
 
     @Get()
-    getAll() {
+    async getAll() {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.categoriesService.findAll() },
+            { rows: await this.categoriesService.findAll() },
         );
     }
 
     @Get(':id')
-    getOne(@Param('id', ParseIntPipe) id: number) {
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.categoriesService.findOne(id) },
+            {
+                rows: await this.categoriesService.findOne(id),
+            },
         );
     }
 
@@ -52,8 +54,8 @@ export class CategoriesController {
     }
 
     @Post()
-    create(@Body() payload: createCategoryDTO) {
-        const category = this.categoriesService.create(payload);
+    async create(@Body() payload: createCategoryDTO) {
+        const category = await this.categoriesService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,
@@ -64,8 +66,11 @@ export class CategoriesController {
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() payload: updateCategoryDTO = {}) {
-        const category = this.categoriesService.update(id, payload);
+    async update(
+        @Param('id') id: number,
+        @Body() payload: updateCategoryDTO = {},
+    ) {
+        const category = await this.categoriesService.update(id, payload);
         return success(
             {
                 response: RESPONSES.SUCCESS,
@@ -76,8 +81,8 @@ export class CategoriesController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number) {
-        this.categoriesService.delete(id);
+    async delete(@Param('id') id: number) {
+        await this.categoriesService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

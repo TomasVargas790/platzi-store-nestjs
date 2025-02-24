@@ -2,9 +2,11 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    ManyToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { Product } from './product.entity';
 
 @Entity()
 export class Category {
@@ -14,13 +16,18 @@ export class Category {
     @Column({ type: 'varchar', length: '255' })
     name: string;
 
-    @CreateDateColumn({
+    @ManyToMany(() => Product, (product) => product.brand)
+    products: Product[];
+
+   @CreateDateColumn({
+    name: 'created_at',
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',
     })
     createdAt: Date;
 
-    @UpdateDateColumn({
+   @UpdateDateColumn({
+    name: 'updated_at',
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',
     })

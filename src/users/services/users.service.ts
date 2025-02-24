@@ -4,7 +4,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { createUserDTO, updateUserDTO } from 'src/users/dtos/users.dto';
 import { Order } from '../entities/order.entity';
@@ -29,7 +29,9 @@ export class UsersService {
     }
 
     findOne(id: number) {
-        const user = this.usersRepository.findOne(id);
+        const user = this.usersRepository.findOne({
+            where: { id },
+        });
         if (!user) {
             throw new NotFoundException(`User ${id} not found!`);
         }
@@ -37,12 +39,14 @@ export class UsersService {
     }
 
     async findOrderByUserId(id: number): Promise<Order[]> {
-        const user = this.findOne(id);
+        const user = await this.customerService.findOne(id);
         if (!user) {
             throw new NotFoundException(`User ${id} not found`);
         }
 
-        return await this.ordersRepository.find({ where: { user } });
+        return await this.ordersRepository.find({
+            where: { customer: { id: user.id } },
+        });
     }
 
     async create(payload: createUserDTO) {
@@ -65,13 +69,17 @@ export class UsersService {
     }
 
     async update(id: number, payload: updateUserDTO) {
-        const user = await this.usersRepository.findOne(id);
+        const user = await this.usersRepository.findOne({
+            where: { id },
+        });
         this.usersRepository.merge(user, payload);
         return this.usersRepository.save(user);
     }
 
     async delete(id: number) {
-        const user = await this.usersRepository.findOne(id);
+        const user = await this.usersRepository.findOne({
+            where: { id },
+        });
         if (!user) {
             throw new NotFoundException(`user ${id} not found!`);
         }

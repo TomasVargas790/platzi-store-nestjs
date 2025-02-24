@@ -19,30 +19,32 @@ export class BrandsController {
     constructor(private brandsService: BrandsService) {}
 
     @Get()
-    getAll() {
+    async FgetAll() {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.brandsService.findAll() },
+            { rows: await this.brandsService.findAll() },
         );
     }
 
     @Get(':id')
-    getOne(@Param('id', ParseIntPipe) id: number) {
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return success(
             {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: this.brandsService.findOne(id) },
+            {
+                rows: await this.brandsService.findOne(id),
+            },
         );
     }
 
     @Post()
-    create(@Body() payload: createBrandDTO) {
-        const brand = this.brandsService.create(payload);
+    async create(@Body() payload: createBrandDTO) {
+        const brand = await this.brandsService.create(payload);
         return success(
             {
                 response: RESPONSES.SUCCESS_CREATION,
@@ -53,11 +55,11 @@ export class BrandsController {
     }
 
     @Put(':id')
-    update(
+    async update(
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: updateBrandDTO = {},
     ) {
-        const brand = this.brandsService.update(id, payload);
+        const brand = await this.brandsService.update(id, payload);
         return success(
             {
                 response: RESPONSES.SUCCESS,
@@ -68,8 +70,8 @@ export class BrandsController {
     }
 
     @Delete(':id')
-    delete(@Param('id', ParseIntPipe) id: number) {
-        this.brandsService.delete(id);
+    async delete(@Param('id', ParseIntPipe) id: number) {
+        await this.brandsService.delete(id);
         return success(
             {
                 response: RESPONSES.SUCCESS,

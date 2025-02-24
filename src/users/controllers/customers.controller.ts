@@ -40,7 +40,9 @@ export class CustomersController {
                 response: RESPONSES.SUCCESS,
                 object: OBJECT,
             },
-            { rows: await this.customersService.findOne(id) },
+            {
+                rows: await this.customersService.findOne(id),
+            },
         );
     }
 

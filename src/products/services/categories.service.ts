@@ -20,26 +20,35 @@ export class CategoriesService {
     }
 
     async findOne(id: number) {
-        const category = await this.categoryRepository.findOne(id);
+        const category = await this.categoryRepository.findOne({
+            where: { id },
+            relations: ['products'],
+        });
         if (!category) {
             throw new NotFoundException(`Category ${id} not found!`);
         }
         return category;
     }
 
-    create(payload: createCategoryDTO) {
+    async create(payload: createCategoryDTO) {
+        console.log('aaaaaaaaaaa');
+
         const newProduct = this.categoryRepository.create(payload);
-        return this.categoryRepository.save(newProduct);
+        return await this.categoryRepository.save(newProduct);
     }
 
     async update(id: number, payload: updateCategoryDTO) {
-        const category = await this.categoryRepository.findOne(id);
+        const category = await this.categoryRepository.findOne({
+            where: { id },
+        });
         this.categoryRepository.merge(category, payload);
-        return this.categoryRepository.save(category);
+        return await this.categoryRepository.save(category);
     }
 
     async delete(id: number) {
-        const category = await this.categoryRepository.findOne(id);
+        const category = await this.categoryRepository.findOne({
+            where: { id },
+        });
         if (!category) {
             throw new NotFoundException(`Category ${id} not found!`);
         }
